@@ -60,6 +60,7 @@ services:
       - ../aegra-app/auth.py:/app/auth.py:ro
       - ../aegra-app/alembic:/app/alembic:ro
       - ../aegra-app/alembic.ini:/app/alembic.ini:ro
+      - ../aegra-app/custom_routes_example.py:/app/custom_routes_example.py:ro
       - chroma_data:/secrag/chroma_db
       - state_data:/data/state:ro
     command: >

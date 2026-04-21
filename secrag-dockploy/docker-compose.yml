@@ -1,0 +1,78 @@
+services:
+  postgres:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-user}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-password}
+      POSTGRES_DB: ${POSTGRES_DB:-aegra}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-user} -d ${POSTGRES_DB:-aegra}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  ingestion-worker:
+    build:
+      context: .
+      dockerfile: worker/Dockerfile
+    environment:
+      SEC_USER_AGENT: ${SEC_USER_AGENT:-Company Name contact@example.com}
+      REQUEST_INTERVAL_SECONDS: ${REQUEST_INTERVAL_SECONDS:-0.1}
+      MAX_COMPANIES: ${MAX_COMPANIES:-100}
+      TARGET_FORM: ${TARGET_FORM:-10-K}
+      LOOKBACK_DAYS: ${LOOKBACK_DAYS:-365}
+      SP500_CSV_PATH: /app/data/sp500.csv
+      CHROMA_DB_PATH: /data/chroma_db
+      STATE_DIR: /data/state
+      FORCE_REINGEST: ${FORCE_REINGEST:-false}
+      INGESTION_COMPLETE_FLAG: /data/state/ingestion_complete.flag
+    volumes:
+      - chroma_data:/data/chroma_db
+      - state_data:/data/state
+      - ../scanner/sp500.csv:/app/data/sp500.csv:ro
+
+  aegra:
+    build:
+      context: ../aegra-app
+      dockerfile: deployments/docker/Dockerfile
+    depends_on:
+      postgres:
+        condition: service_healthy
+      ingestion-worker:
+        condition: service_completed_successfully
+    environment:
+      DATABASE_URL: postgresql+asyncpg://${POSTGRES_USER:-user}:${POSTGRES_PASSWORD:-password}@postgres:5432/${POSTGRES_DB:-aegra}
+      AUTH_TYPE: noop
+      DEBUG: "false"
+      PORT: ${PORT:-8000}
+      HOME: /app
+      XDG_CACHE_HOME: /app/.cache
+      CHROMA_DB_PATH: /secrag/chroma_db
+      INGESTION_COMPLETE_FLAG: /data/state/ingestion_complete.flag
+    ports:
+      - "${PORT:-8000}:${PORT:-8000}"
+    volumes:
+      - ../aegra-app/aegra.json:/app/aegra.json:ro
+      - ../aegra-app/graphs:/app/graphs:ro
+      - ../aegra-app/src:/app/src:ro
+      - ../aegra-app/auth.py:/app/auth.py:ro
+      - ../aegra-app/alembic:/app/alembic:ro
+      - ../aegra-app/alembic.ini:/app/alembic.ini:ro
+      - chroma_data:/secrag/chroma_db
+      - state_data:/data/state:ro
+    command: >
+      sh -c "
+        python -c 'import os,time; flag=os.getenv(\"INGESTION_COMPLETE_FLAG\",\"/data/state/ingestion_complete.flag\"); print(f\"Waiting for ingestion flag: {flag}\", flush=True); 
+        while not os.path.exists(flag): time.sleep(5); 
+        print(\"Ingestion complete flag found.\", flush=True)' &&
+        alembic upgrade head &&
+        uvicorn src.agent_server.main:app --host 0.0.0.0 --port $${PORT:-8000}
+      "
+
+volumes:
+  postgres_data:
+  chroma_data:
+  state_data:
+

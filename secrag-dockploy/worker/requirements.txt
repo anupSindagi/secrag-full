@@ -1,0 +1,9 @@
+chromadb
+python-dotenv
+beautifulsoup4
+lxml
+tiktoken
+requests
+sec-parser
+pandas
+tabulate

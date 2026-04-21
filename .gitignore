@@ -1,0 +1,22 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.venv/
+venv/
+# Env/secrets
+.env
+.env.*
+!.env.example
+# OS/editor
+.DS_Store
+.vscode/
+.idea/
+# Docker / runtime state
+chroma_db/
+data/
+*.log

@@ -1,0 +1,10 @@
+appwrite
+chromadb
+python-dotenv
+beautifulsoup4
+lxml
+tiktoken
+requests
+ixbrlparse
+sec-parser
+

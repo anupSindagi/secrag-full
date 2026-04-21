@@ -1,0 +1,33 @@
+📁 ChromaDB path: /app/chroma_db
+🔧 Using 6 worker processes for parallel ingestion
+🔧 Pre-loading ChromaDB embedding model...
+/root/.cache/chroma/onnx_models/all-MiniLM-L6-v2/onnx.tar.gz:   0%|          | 0.00/79.3M [00:00<?, ?iB/s]/root/.cache/chroma/onnx_models/all-MiniLM-L6-v2/onnx.tar.gz:   8%|▊         | 6.11M/79.3M [00:00<00:01, 64.0MiB/s]/root/.cache/chroma/onnx_models/all-MiniLM-L6-v2/onnx.tar.gz:  20%|██        | 16.0M/79.3M [00:00<00:00, 87.5MiB/s]/root/.cache/chroma/onnx_models/all-MiniLM-L6-v2/onnx.tar.gz:  33%|███▎      | 26.2M/79.3M [00:00<00:00, 96.2MiB/s]/root/.cache/chroma/onnx_models/all-MiniLM-L6-v2/onnx.tar.gz:  45%|████▌     | 35.9M/79.3M [00:00<00:00, 98.2MiB/s]/root/.cache/chroma/onnx_models/all-MiniLM-L6-v2/onnx.tar.gz:  57%|█████▋    | 45.3M/79.3M [00:00<00:00, 98.5MiB/s]/root/.cache/chroma/onnx_models/all-MiniLM-L6-v2/onnx.tar.gz:  69%|██████▉   | 54.7M/79.3M [00:00<00:00, 97.6MiB/s]/root/.cache/chroma/onnx_models/all-MiniLM-L6-v2/onnx.tar.gz:  81%|████████  | 64.3M/79.3M [00:00<00:00, 98.7MiB/s]/root/.cache/chroma/onnx_models/all-MiniLM-L6-v2/onnx.tar.gz:  93%|█████████▎| 74.2M/79.3M [00:00<00:00, 100MiB/s] /root/.cache/chroma/onnx_models/all-MiniLM-L6-v2/onnx.tar.gz: 100%|██████████| 79.3M/79.3M [00:00<00:00, 97.8MiB/s]
+✅ ChromaDB embedding model pre-loaded successfully
+
+🚀 Starting ingestion for pending documents (batch size=100, workers=6)
+/app/ingester.py:442: DeprecationWarning: Call to deprecated function 'list_documents'. This API has been deprecated since 1.8.0. Please use `tablesDB.list_rows` instead.
+  response = databases.list_documents(
+
+📦 Processing batch #1 (100 documents)
+
+  📄 Processing document #11/100: mmm-20181231x10k.htm
+
+  📄 Processing document #1/100: mmm-20210630x10q.htm
+
+  📄 Processing document #6/100: mmm-20200428x10q.htm
+    📋 Parsing as form type: 10-K
+
+  📄 Processing document #21/100: aos-20240630.htm
+    📋 Parsing as form type: 10-Q
+
+  📄 Processing document #26/100: aos-20230331.htm
+
+  📄 Processing document #16/100: aos-20250930.htm
+    📋 Parsing as form type: 10-Q
+    📋 Parsing as form type: 10-Q
+    📋 Parsing as form type: 10-Q
+    📋 Parsing as form type: 10-Q
+/usr/local/lib/python3.11/site-packages/sec_parser/utils/bs4_/approx_table_metrics.py:31: UserWarning: Failed to get table metrics: 'NoneType' object has no attribute 'text'
+  warnings.warn(f"Failed to get table metrics: {e}", stacklevel=0)
+/usr/local/lib/python3.11/site-packages/sec_parser/utils/bs4_/approx_table_metrics.py:31: UserWarning: Failed to get table metrics: 'NoneType' object has no attribute 'text'
+  warnings.warn(f"Failed to get table metrics: {e}", stacklevel=0)

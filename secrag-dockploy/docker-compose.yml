@@ -52,7 +52,7 @@ services:
       CHROMA_DB_PATH: /secrag/chroma_db
       INGESTION_COMPLETE_FLAG: /data/state/ingestion_complete.flag
     ports:
-      - "${PORT:-8000}:${PORT:-8000}"
+      - "${HOST_PORT:-8010}:${PORT:-8000}"
     volumes:
       - ../aegra-app/aegra.json:/app/aegra.json:ro
       - ../aegra-app/graphs:/app/graphs:ro

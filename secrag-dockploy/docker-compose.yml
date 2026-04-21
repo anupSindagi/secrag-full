@@ -47,6 +47,7 @@ services:
       AUTH_TYPE: noop
       DEBUG: "false"
       PORT: ${PORT:-8000}
+      OPENAI_API_KEY: ${OPENAI_API_KEY}
       HOME: /app
       XDG_CACHE_HOME: /app/.cache
       CHROMA_DB_PATH: /secrag/chroma_db

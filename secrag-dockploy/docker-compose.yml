@@ -64,9 +64,10 @@ services:
       - state_data:/data/state:ro
     command: >
       sh -c "
-        python -c 'import os,time; flag=os.getenv(\"INGESTION_COMPLETE_FLAG\",\"/data/state/ingestion_complete.flag\"); print(f\"Waiting for ingestion flag: {flag}\", flush=True); 
-        while not os.path.exists(flag): time.sleep(5); 
-        print(\"Ingestion complete flag found.\", flush=True)' &&
+        flag=$${INGESTION_COMPLETE_FLAG:-/data/state/ingestion_complete.flag} &&
+        echo \"Waiting for ingestion flag: $$flag\" &&
+        while [ ! -f \"$$flag\" ]; do sleep 5; done &&
+        echo \"Ingestion complete flag found.\" &&
         alembic upgrade head &&
         uvicorn src.agent_server.main:app --host 0.0.0.0 --port $${PORT:-8000}
       "
